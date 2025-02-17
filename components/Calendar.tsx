@@ -76,7 +76,7 @@ const Calendar: React.FC = () => {
       };
 
       calendarApi.addEvent(newEvent);
-      setCurrentEvents((prevEvents) => [...prevEvents, newEvent]); // Add event to state
+      setCurrentEvents((prevEvents:any) => [...prevEvents, newEvent]); // Add event to state
       toast.success("🎉 Event added successfully!");
       handleCloseDialog();
     }
@@ -163,7 +163,11 @@ const Calendar: React.FC = () => {
                 dayMaxEvents={true}
                 select={handleDateClick}
                 eventClick={handleEventClick}
-                events={currentEvents} // Ensure the events are passed here
+                initialEvents={
+                  typeof window !== "undefined"
+                    ? JSON.parse(localStorage.getItem("events") || "[]")
+                    : []
+                } /// Ensure the events are passed here
               />
             )}
           </div>
