@@ -14,7 +14,7 @@ import interactionPlugin from "@fullcalendar/interaction";
 import { ToastContainer, toast } from "react-toastify";
 import Loader from "./ui/loader";
 import "react-toastify/dist/ReactToastify.css";
-import Header from "./ui/Header";
+import Header from "./ui/navBar";
 import EventDialog from "./ui/eventDailog";
 
 
