@@ -11,20 +11,13 @@ import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import { ToastContainer, toast } from "react-toastify";
+import Loader from "./ui/loader";
 import "react-toastify/dist/ReactToastify.css";
+import Header from "./ui/Header";
+import EventDialog from "./ui/eventDailog";
 
-const Loader = () => (
-  <div className="flex justify-center items-center h-full">
-    <div className="spinner-border animate-spin border-t-4 border-blue-500 w-12 h-12 rounded-full"></div>
-  </div>
-);
+
 
 const Calendar: React.FC = () => {
   const [currentEvents, setCurrentEvents] = useState<EventApi[]>([]);
@@ -134,14 +127,7 @@ const Calendar: React.FC = () => {
     <div>
       <ToastContainer position="top-right" autoClose={3000} />
       <div className="min-h-screen bg-gray-100">
-        <header className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white py-6 px-4 md:px-10 flex flex-col md:flex-row justify-between items-center shadow-md">
-          <h1 className="text-2xl md:text-3xl font-bold tracking-wide">
-            📅 Calendar Events
-          </h1>
-          <p className="text-sm md:text-base mt-2 md:mt-0 italic">
-            Manage your events easily!
-          </p>
-        </header>
+        <Header />
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 px-4 md:px-10 py-6">
           <div className="md:col-span-1 bg-white shadow-lg rounded-lg p-6">
@@ -224,113 +210,31 @@ const Calendar: React.FC = () => {
         </div>
       </div>
 
-      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle className="text-lg font-bold text-gray-700">
-              🆕 Add a New Event
-            </DialogTitle>
-          </DialogHeader>
-          <form onSubmit={handleAddEvent}>
-            <input
-              type="text"
-              placeholder="Enter event title..."
-              value={newEventTitle}
-              onChange={(e) => setNewEventTitle(e.target.value)}
-              required
-              className="border border-gray-300 p-3 rounded-md text-lg w-full focus:ring-2 focus:ring-blue-400 transition"
-            />
-            <div className="mt-4">
-              <label className="block text-sm font-medium text-gray-700">
-                Event Category
-              </label>
-              <select
-                value={eventCategory}
-                onChange={(e) => setEventCategory(e.target.value)}
-                className="mt-1 block w-full border border-gray-300 rounded-md"
-              >
-                <option value="">Select Category</option>
-                <option value="Lunch Break">Lunch Break</option>
-                <option value="Holiday">Holiday/Leave</option>
-                <option value="Office">Office</option>
-              </select>
-            </div>
-            <div className="mt-6 flex justify-end space-x-4">
-              <button
-                type="button"
-                onClick={handleCloseDialog}
-                className="px-6 py-2 text-white bg-gray-500 rounded-md"
-              >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                className="px-6 py-2 text-white bg-blue-500 rounded-md"
-              >
-                Add Event
-              </button>
-            </div>
-          </form>
-        </DialogContent>
-      </Dialog>
+      <EventDialog
+        isOpen={isDialogOpen}
+        setIsOpen={setIsDialogOpen}
+        title="Add New Event"
+        handleSubmit={handleAddEvent}
+        handleClose={() => setIsDialogOpen(false)}
+        eventTitle={newEventTitle}
+        setEventTitle={setNewEventTitle}
+        eventCategory={eventCategory}
+        setEventCategory={setEventCategory}
+      />
 
-      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle className="text-lg font-bold text-gray-700">
-              ✏️ Edit Event
-            </DialogTitle>
-          </DialogHeader>
-          <form onSubmit={handleUpdateEvent}>
-            <input
-              type="text"
-              value={newEventTitle}
-              onChange={(e) => setNewEventTitle(e.target.value)}
-              required
-              className="border border-gray-300 p-3 rounded-md text-lg w-full focus:ring-2 focus:ring-blue-400 transition"
-            />
-            <div className="mt-4">
-              <label className="block text-sm font-medium text-gray-700">
-                Event Category
-              </label>
-              <select
-                value={eventCategory}
-                onChange={(e) => setEventCategory(e.target.value)}
-                className="mt-1 block w-full border border-gray-300 rounded-md"
-              >
-                <option value="">Select Category</option>
-                <option value="Lunch Break">Lunch Break</option>
-                <option value="Holiday">Holiday/Leave</option>
-                <option value="Office">Office</option>
-              </select>
-            </div>
-            <div className="mt-6 flex justify-end space-x-4">
-              <button
-                type="button"
-                onClick={handleCloseDialog}
-                className="px-6 py-2 text-white bg-gray-500 rounded-md"
-              >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                className="px-6 py-2 text-white bg-blue-500 rounded-md"
-              >
-                Update Event
-              </button>
-            </div>
-          </form>
-          <div className="mt-4 flex justify-end">
-            <button
-              type="button"
-              onClick={handleDeleteEvent}
-              className="text-sm text-red-500"
-            >
-              Delete Event
-            </button>
-          </div>
-        </DialogContent>
-      </Dialog>
+      <EventDialog
+        isOpen={isEditDialogOpen}
+        setIsOpen={setIsEditDialogOpen}
+        title="Edit Event"
+        handleSubmit={handleUpdateEvent}
+        handleClose={() => setIsEditDialogOpen(false)}
+        eventTitle={newEventTitle}
+        setEventTitle={setNewEventTitle}
+        eventCategory={eventCategory}
+        setEventCategory={setEventCategory}
+        isEditMode={true}
+        handleDeleteEvent={handleDeleteEvent}
+      />
     </div>
   );
 };
